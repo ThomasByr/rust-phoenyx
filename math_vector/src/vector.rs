@@ -1,4 +1,3 @@
-use crate::protocol::InvSqrt64;
 use numeric::{Float, One, Zero};
 use std::ops::MulAssign;
 
@@ -294,7 +293,7 @@ impl<F: Float + MulAssign + From<f64> + Into<f64>> Vector<F> {
     pub fn set_length(&mut self, length: F) {
         let len_sq = self.length_squared();
         if len_sq != F::zero() {
-            let factor = length * InvSqrt64::inv_sqrt64(len_sq.into()).into();
+            let factor = length * len_sq.sqrt().recip();
             self.x *= factor;
             self.y *= factor;
             self.z *= factor;
@@ -331,7 +330,7 @@ impl<F: Float + MulAssign + From<f64> + Into<f64>> Vector<F> {
     pub fn limit(&mut self, max_length: F) {
         let len_sq = self.length_squared();
         if len_sq > max_length * max_length {
-            let factor = max_length * InvSqrt64::inv_sqrt64(len_sq.into()).into();
+            let factor = max_length * len_sq.sqrt().recip();
             self.x *= factor;
             self.y *= factor;
             self.z *= factor;
@@ -348,7 +347,7 @@ impl<F: Float + MulAssign + From<f64> + Into<f64>> Vector<F> {
     /// Normalize the vector.
     /// Does nothing if the vector is of length zero.
     pub fn normalize(&mut self) {
-        self.set_length_squared(F::one());
+        self.set_length(F::one());
     }
 
     /// Return a normalized copy of the vector.
@@ -362,8 +361,15 @@ impl<F: Float + MulAssign + From<f64> + Into<f64>> Vector<F> {
 
 impl<F: Float> Vector<F> {
     /// Return the angle in the 2d plane between the positive x axis and the vector.
-    pub fn heading(self) -> F {
+    pub fn heading2d(self) -> F {
         self.y.atan2(self.x)
+    }
+
+    /// Return a couple of angles in the 3d space.
+    pub fn heading3d(self) -> (F, F) {
+        let theta = self.y.atan2(self.x);
+        let phi = (self.z / self.length()).asin();
+        (theta, phi)
     }
 
     /// Return the angle in radians between two vectors.
