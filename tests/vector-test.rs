@@ -1,5 +1,4 @@
 use math_vector::Vector;
-use numeric::Float;
 
 use std::f64::consts::PI;
 
