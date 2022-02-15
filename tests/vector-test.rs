@@ -190,3 +190,16 @@ fn rotate() {
     assert_eq!(v.is_close(y), true);
     assert_eq!(v.is_close(x), false);
 }
+
+#[test]
+fn polars() {
+    let reference = Vector::new(1.0, 1.0, 1.0).normalized();
+    let (theta, phi) = reference.heading3d();
+    let v = Vector::from_polar(theta, phi);
+    assert_eq!(v.is_close(reference), true);
+
+    let reference = Vector::new(1.0, 1.0, 0.0).normalized();
+    let angle = reference.heading2d();
+    let v = Vector::from_angle(angle);
+    assert_eq!(v.is_close(reference), true);
+}
