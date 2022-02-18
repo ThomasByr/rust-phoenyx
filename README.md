@@ -1,4 +1,4 @@
-# Phoenyx - OpenGL & Piston Gaming Engine v0.1.0
+# Phoenyx - OpenGL Engine v0.1.0
 
 > To work with the latest stable version add the following to your `Cargo.toml`'s dependencies section
 >
