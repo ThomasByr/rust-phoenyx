@@ -269,6 +269,26 @@ impl<F: Float> Vector<F> {
         self - normal * self.dot(normal) * F::from(2.0).unwrap()
     }
 
+    /// Return a new vector which is the refraction of the current one
+    /// on a surface with the given local normal.
+    /// The refraction index is the ratio of the indices of refraction of the medium
+    /// on which the current vector is and the medium on which the new vector will be.
+    pub fn refract(self, normal: Self, eta: F) -> Option<Self> {
+        let cos_theta = self.dot(normal);
+        let sin_theta = eta * (cos_theta + cos_theta).sqrt();
+        if sin_theta > F::zero() {
+            Some(self * eta - normal * (eta * cos_theta - sin_theta))
+        } else {
+            None
+        }
+    }
+
+    /// Return a new vector which is the projection of the current one
+    /// onto the given vector.
+    pub fn project(self, other: Self) -> Self {
+        other * (self.dot(other) / other.length_squared())
+    }
+
     /// Compare two vectors for equality.
     /// The comparison is done with the relative error `epsilon`
     /// so that the error is relative to the magnitude of both vectors.
