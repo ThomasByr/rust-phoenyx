@@ -181,6 +181,15 @@ impl<F: Default + Zero + One + Float> Vector<F> {
             z: F::zero(),
         }
     }
+
+    /// Only keep the planar component of the vector.
+    pub fn _2d(self) -> Self {
+        Vector {
+            x: self.x,
+            y: self.y,
+            z: F::zero(),
+        }
+    }
 }
 
 impl<F: Copy + Clone + Float> Vector<F> {
@@ -269,15 +278,15 @@ impl<F: Float> Vector<F> {
     /// use math_vector::Vector;
     /// let x = Vector::new(1.0, 0.0, 0.0);
     /// let y = Vector::new(1.0000000001, 0.0, 0.0);
-    /// assert_eq!(y.is_close(x), true);
+    /// assert!(y.is_close(x));
     ///
     /// let x = Vector::new(1000000.0, 0.0, 0.0);
     /// let y = Vector::new(1000000000.1, 0.0, 0.0);
-    /// assert_eq!(y.is_close(x), true);
+    /// assert!(y.is_close(x));
     ///
     /// let x = Vector::new(1.0, 0.0, 0.0);
     /// let y = Vector::new(1.0001, 0.0, 0.0);
-    /// assert_eq!(y.is_close(x), false);
+    /// assert!(!y.is_close(x));
     /// ```
     pub fn is_close(self, reference: Vector<F>) -> bool {
         let num = (self - reference).length_squared();
@@ -287,7 +296,7 @@ impl<F: Float> Vector<F> {
     }
 }
 
-impl<F: Float + MulAssign + From<f64> + Into<f64>> Vector<F> {
+impl<F: Float + MulAssign> Vector<F> {
     /// Set the length of the vector.
     /// The scaling factor is computed with the help of the fast inverse square root.
     pub fn set_length(&mut self, length: F) {
