@@ -166,15 +166,15 @@ fn cross() {
 fn is_close() {
     let x = Vector::new(1.0, 0.0, 0.0);
     let y = Vector::new(1.0000000001, 0.0, 0.0);
-    assert_eq!(y.is_close(x), true);
+    assert!(y.is_close(x));
 
     let x = Vector::new(1000000000.0, 0.0, 0.0);
     let y = Vector::new(1000000000.1, 0.0, 0.0);
-    assert_eq!(x.is_close(y), true);
+    assert!(x.is_close(y));
 
     let x = Vector::new(1.0, 0.0, 0.0);
     let y = Vector::new(1.0001, 0.0, 0.0);
-    assert_eq!(x.is_close(y), false);
+    assert!(!x.is_close(y));
 }
 
 #[test]
@@ -183,23 +183,52 @@ fn rotate() {
     let y = Vector::new(0.0, 1.0, 0.0);
     let z = Vector::new(0.0, 0.0, 1.0);
 
-    assert_eq!(x.rotated(PI / 2f64, z).is_close(y), true);
+    assert!(x.rotated(PI / 2f64, z).is_close(y));
 
     let mut v = x;
     v.rotate(PI / 2f64, z);
-    assert_eq!(v.is_close(y), true);
-    assert_eq!(v.is_close(x), false);
+    assert!(v.is_close(y));
+    assert!(!v.is_close(x));
 }
 
 #[test]
 fn polars() {
-    let reference = Vector::new(1.0, 1.0, 1.0).normalized();
+    let reference: Vector<f32> = Vector::one().normalized();
     let (theta, phi) = reference.heading3d();
     let v = Vector::from_polar(theta, phi);
-    assert_eq!(v.is_close(reference), true);
+    assert!(v.is_close(reference));
 
-    let reference = Vector::new(1.0, 1.0, 0.0).normalized();
+    let reference: Vector<f32> = Vector::one()._2d().normalized();
     let angle = reference.heading2d();
     let v = Vector::from_angle(angle);
-    assert_eq!(v.is_close(reference), true);
+    assert!(v.is_close(reference));
+}
+
+#[test]
+fn spec_ops() {
+    let v = Vector::new(1.0, 2.0, 3.0);
+    let w = v + 1.0;
+    assert_eq!(w, Vector::new(2.0, 3.0, 4.0));
+
+    let w = v - 1.0;
+    assert_eq!(w, Vector::new(0.0, 1.0, 2.0));
+
+    let w = v * 2.0;
+    assert_eq!(w, Vector::new(2.0, 4.0, 6.0));
+
+    let w = v / 2.0;
+    assert_eq!(w, Vector::new(0.5, 1.0, 1.5));
+}
+
+#[test]
+fn length() {
+    let v = Vector::new(1.0, 2.0, 3.0);
+    assert_eq!(v.length(), 3.7416573867739413);
+
+    let w = v.with_length(4.0);
+    assert_eq!(w.length(), 4.0);
+
+    let mut w = v.with_length(1.0);
+    w *= v.length();
+    assert!(w.is_close(v));
 }
