@@ -232,3 +232,36 @@ fn length() {
     w *= v.length();
     assert!(w.is_close(v));
 }
+
+#[test]
+fn reflect() {
+    let v = Vector::new(1.0, -1.0, 0.0);
+    let y = Vector::one().ordinate();
+    let r = v.reflect(y);
+
+    assert!(r.is_close(Vector::new(1.0, 1.0, 0.0)));
+}
+
+#[test]
+fn refract() {
+    let v = Vector::new(1.0, -1.0, 0.0);
+    let x = Vector::one().abscissa();
+
+    let r = v.refract(x, 1.0).unwrap();
+    assert!(r.is_close(r.clone()));
+
+    let i = v.refract(x, 2.0).is_some();
+    assert!(i); // todo: some real test
+}
+
+#[test]
+fn project() {
+    let v: Vector<f32> = Vector::one()._2d();
+    let x = Vector::one().abscissa();
+
+    let r = v.project(x);
+    assert!(r.is_close(x));
+
+    let r = x.project(v);
+    assert!(r.is_close(v / 2.0));
+}
