@@ -265,3 +265,16 @@ fn project() {
     let r = x.project(v);
     assert!(r.is_close(v / 2.0));
 }
+
+#[test]
+fn reject() {
+    let v: Vector<f32> = Vector::one()._2d();
+    let x = Vector::one().abscissa();
+    let y = Vector::one().ordinate();
+
+    let r = v.reject(x);
+    assert!(r.is_close(y));
+
+    let r = x.reject(v);
+    assert!(r.is_close((v / 2.0) - y));
+}
