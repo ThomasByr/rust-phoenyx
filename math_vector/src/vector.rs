@@ -86,7 +86,7 @@ impl<F: Default + Zero + One + Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let v = Vector::default();
     /// assert_eq!(Vector::new(0, 0, 0), v);
     /// ```
@@ -127,7 +127,7 @@ impl<F: Default + Zero + One + Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let v = Vector::new(10.0, 20.0, 30.0);
     /// assert_eq!(Vector::new(10.0, 0.0, 0.0), v.abscissa());
     /// ```
@@ -143,7 +143,7 @@ impl<F: Default + Zero + One + Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let v = Vector::new(10.0, 20.0, 30.0);
     /// assert_eq!(Vector::new(0.0, 20.0, 0.0), v.ordinate());
     /// ```
@@ -159,7 +159,7 @@ impl<F: Default + Zero + One + Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let v = Vector::new(10.0, 20.0, 30.0);
     /// assert_eq!(Vector::new(0.0, 0.0, 30.0), v.applicate());
     /// ```
@@ -206,7 +206,7 @@ impl<F: Copy + Clone + Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let v1 = Vector::new(1.0, 2.0, 3.0);
     /// let v2 = Vector::new(2.0, 3.0, 4.0);
     /// assert_eq!(Vector::new(1.5, 2.5, 3.5), v1.lerp(v2, 0.5));
@@ -221,7 +221,7 @@ impl<F: Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let x = Vector::new(1.0, 0.0, 0.0);
     /// let y = Vector::new(0.0, 1.0, 0.0);
     /// assert_eq!(x.dot(y), 1.0);
@@ -234,7 +234,7 @@ impl<F: Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let x = Vector::new(1.0, 0.0, 0.0);
     /// let y = Vector::new(0.0, 1.0, 0.0);
     /// let z = Vector::new(0.0, 0.0, 1.0);
@@ -298,13 +298,21 @@ impl<F: Float> Vector<F> {
         other * (self.dot(other) / other.length_squared())
     }
 
+    /// Return a new vector which is the rejection of the current one
+    /// onto the given vector.
+    /// The rejection is the projection of the current vector onto a hyperplane
+    /// whose normal is the given vector.
+    pub fn reject(self, other: Self) -> Self {
+        self - self.project(other)
+    }
+
     /// Compare two vectors for equality.
     /// The comparison is done with the relative error `epsilon`
     /// so that the error is relative to the magnitude of both vectors.
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let x = Vector::new(1.0, 0.0, 0.0);
     /// let y = Vector::new(1.0000000001, 0.0, 0.0);
     /// assert!(y.is_close(x));
@@ -422,7 +430,7 @@ impl<F: Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let v = Vector::new(1.0, 0.0, 0.0);
     /// let axis = Vector::new(0.0, 0.0, 1.0);
     /// let angle = std::f64::consts::PI / 2.0;
@@ -439,7 +447,7 @@ impl<F: Float> Vector<F> {
     ///
     /// # Example
     /// ```
-    /// use math_vector::Vector;
+    /// use phoenyx::Vector;
     /// let mut v = Vector::new(1.0, 0.0, 0.0);
     /// let axis = Vector::new(0.0, 0.0, 1.0);
     /// let angle = std::f64::consts::PI / 2.0;
